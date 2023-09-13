@@ -1,4 +1,4 @@
-# Import required library
+ #Import required library
 import openpyxl
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Border, Side
@@ -34,29 +34,36 @@ for row in Full_Sheet.iter_rows(min_row=1, min_col=1, max_row=last_row, max_col=
 
 dest_sheet.cell(row=1, column=last_column + 1, value="Total")
 dest_sheet.cell(row=1, column=last_column + 2, value="Letter Grade")
+dest_sheet.cell(row=1, column=last_column + 3, value="Pass / Fail")
 
-# n7sb eldragat for total
-for row_num in range(4, last_row + 1):  
-    total_assignment = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(3, 8)])  
-    calculated_value_assignment = (total_assignment / .5) * dest_sheet.cell(row=2, column=3).value  
+# Perform calculations and populate column 18
+for row_num in range(4, last_row + 1):  # Loop through each row from row 4 to last_row
+    total_assignment = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(3, 8)])  # Sum from column 3 to column 7
+    calculated_value_assignment = (total_assignment / .5) * dest_sheet.cell(row=2, column=3).value  # Perform the calculation
 
-    total_quiz = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(8, 13)]) 
-    calculated_value_quiz = (total_quiz / .5) * dest_sheet.cell(row=2, column=8).value  
+    total_quiz = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(8, 13)])  # Sum from column 8 to column 12
+    calculated_value_quiz = (total_quiz / .5) * dest_sheet.cell(row=2, column=8).value  # Perform the calculation
 
-    total_midterm = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(13, 15)])  
-    calculated_value_midterm = (total_midterm / 2) * dest_sheet.cell(row=2, column=13).value  
+    total_midterm = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(13, 15)])  # Sum from column 13 to column 14
+    calculated_value_midterm = (total_midterm / 2) * dest_sheet.cell(row=2, column=13).value  # Perform the calculation
 
-    calculated_value_presenation = dest_sheet.cell(row=row_num, column=15).value * dest_sheet.cell(row=2, column=15).value 
+    calculated_value_presenation = dest_sheet.cell(row=row_num, column=15).value * dest_sheet.cell(row=2, column=15).value # Perform the calculation
 
-    calculated_value_project = dest_sheet.cell(row=row_num, column=16).value * dest_sheet.cell(row=2, column=16).value  
+    calculated_value_project = dest_sheet.cell(row=row_num, column=16).value * dest_sheet.cell(row=2, column=16).value  # Perform the calculation
 
-    calculated_value_final_exam = dest_sheet.cell(row=row_num, column=17).value * dest_sheet.cell(row=2, column=17).value  
+    calculated_value_final_exam = dest_sheet.cell(row=row_num, column=17).value * dest_sheet.cell(row=2, column=17).value  # Perform the calculation
 
     dest_sheet.cell(row=row_num, column=18, value=calculated_value_assignment+calculated_value_quiz+calculated_value_midterm+calculated_value_presenation+calculated_value_project+calculated_value_final_exam)  # Place the result in column 18
 
-# if estatment for the letter grade
+# Apply formula from row 4 to last row
+for row in range(4, last_row + 1):
+    cell_to_check = f'S{row}'
+    cell_to_write = f'T{row}'
+    dest_sheet[cell_to_write].value = f'=IF({cell_to_check}="F", "Fail", "Pass")'
+
+# Assign letter grades based on total score (from column 18)
 for row_num in range(4, last_row + 1):
-    total_score = dest_sheet.cell(row=row_num, column=18).value  
+    total_score = dest_sheet.cell(row=row_num, column=18).value  # Retrieve the total score from column 18
 
     if total_score is not None:
         if total_score >= 90:
@@ -80,7 +87,8 @@ for row_num in range(4, last_row + 1):
         else:
             grade = 'F'
 
-        dest_sheet.cell(row=row_num, column=19, value=grade)  # save letter grade
+        dest_sheet.cell(row=row_num, column=19, value=grade)  # Store the letter grade in column 19
+
 # Create a border style
 thin_border = Border(left=Side(style='thin'), 
                      right=Side(style='thin'), 
@@ -98,6 +106,7 @@ dest_sheet.merge_cells('A1:A3')
 dest_sheet.merge_cells('B1:B3')
 dest_sheet.merge_cells('R1:R3')
 dest_sheet.merge_cells('S1:S3')
+dest_sheet.merge_cells('T1:T3')
 # Center-align all cells in destination sheet
 for row in dest_sheet.iter_rows():
     for cell in row:
@@ -129,7 +138,7 @@ for row in range(4, dest_sheet.max_row + 1):  # Starting from row 4 to the end
 
 # Apply orange fill to the first two columns from the 4th row to the end
 for row in range(4, dest_sheet.max_row + 1):  # Starting from row 4 to the end
-    for col in range(3, 20):  # First two columns
+    for col in range(3, 21):  # First two columns
         dest_sheet.cell(row=row, column=col).fill = orange_fill
 
 #---------------------------- Student's Report Sheet ---------------------------
@@ -147,6 +156,7 @@ dest_sheet1.cell(row=7, column=4, value="Year")
 dest_sheet1.cell(row=9, column=1, value="Summary")
 dest_sheet1.cell(row=11, column=2, value="Total")
 dest_sheet1.cell(row=11, column=3, value="Letter Grade")
+dest_sheet1.cell(row=11, column=4, value="Pass / Fail")
 dest_sheet1.cell(row=13, column=1, value="Details")
 dest_sheet1.cell(row=14, column=1, value="Assignments")
 dest_sheet1.cell(row=15, column=1, value="A1")
@@ -202,7 +212,7 @@ dest_sheet1["B21"].value = f'=INDEX(\'Letter Grades\'!N4:N34, MATCH(B3, \'Letter
 dest_sheet1["C21"].value = f'=INDEX(\'Letter Grades\'!O4:O34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
 dest_sheet1["D21"].value = f'=INDEX(\'Letter Grades\'!P4:P34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
 dest_sheet1["E21"].value = f'=INDEX(\'Letter Grades\'!Q4:Q34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
-
+dest_sheet1["D12"].value = f'=INDEX(\'Letter Grades\'!T4:T34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
 # Create a bar chart
 chart1 = BarChart()
 
@@ -271,6 +281,7 @@ dest_sheet1.cell(row=7, column=4).fill = green_fill
 dest_sheet1.cell(row=9, column=1).fill = green_fill
 dest_sheet1.cell(row=11, column=2).fill = green_fill
 dest_sheet1.cell(row=11, column=3).fill = green_fill
+dest_sheet1.cell(row=11, column=4).fill = green_fill
 dest_sheet1.cell(row=13, column=1).fill = green_fill
 dest_sheet1.cell(row=14, column=1).fill = green_fill
 dest_sheet1.cell(row=15, column=1).fill = green_fill
@@ -289,7 +300,7 @@ dest_sheet1.cell(row=20, column=2).fill = green_fill
 dest_sheet1.cell(row=20, column=3).fill = green_fill
 dest_sheet1.cell(row=20, column=4).fill = green_fill
 dest_sheet1.cell(row=20, column=5).fill = green_fill
-dest_sheet1.cell(row=3, column=2).fill = orange_fill
+dest_sheet1.cell(row=3, column=2).fill = blue_fill
 
 
 
