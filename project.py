@@ -7,7 +7,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.chart import BarChart, Reference
 from openpyxl.chart.label import DataLabelList
 # Specify the path to your Excel file
-filepath = '/Users/ehf/Desktop/essa.xlsx'
+filepath = "/Users/ehf/Documents/GitHub/KC-final-project/essa.xlsx"
 
 # Load the workbook
 wb = load_workbook(filepath)
