@@ -6,7 +6,7 @@ from openpyxl.styles import PatternFill
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.chart import BarChart, Reference
 from openpyxl.chart.label import DataLabelList
-# Specify the path to your Excel file
+# change peth to your laptop ehf= your laptop
 filepath = "/Users/ehf/Documents/GitHub/KC-final-project/essa.xlsx"
 
 # Load the workbook
