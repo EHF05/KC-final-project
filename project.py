@@ -39,21 +39,21 @@ dest_sheet.cell(row=1, column=last_column + 3, value="Pass / Fail")
 # Perform calculations and populate column 18
 for row_num in range(4, last_row + 1):  # Loop through each row from row 4 to last_row
     total_assignment = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(3, 8)])  # Sum from column 3 to column 7
-    calculated_value_assignment = (total_assignment / .5) * dest_sheet.cell(row=2, column=3).value  # Perform the calculation
+    calculated_value_assignment = (total_assignment / .5) * dest_sheet.cell(row=2, column=3).value  
 
     total_quiz = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(8, 13)])  # Sum from column 8 to column 12
-    calculated_value_quiz = (total_quiz / .5) * dest_sheet.cell(row=2, column=8).value  # Perform the calculation
+    calculated_value_quiz = (total_quiz / .5) * dest_sheet.cell(row=2, column=8).value  
 
     total_midterm = sum([dest_sheet.cell(row=row_num, column=col_num).value for col_num in range(13, 15)])  # Sum from column 13 to column 14
-    calculated_value_midterm = (total_midterm / 2) * dest_sheet.cell(row=2, column=13).value  # Perform the calculation
+    calculated_value_midterm = (total_midterm / 2) * dest_sheet.cell(row=2, column=13).value  
 
-    calculated_value_presenation = dest_sheet.cell(row=row_num, column=15).value * dest_sheet.cell(row=2, column=15).value # Perform the calculation
+    calculated_value_presenation = dest_sheet.cell(row=row_num, column=15).value * dest_sheet.cell(row=2, column=15).value 
 
-    calculated_value_project = dest_sheet.cell(row=row_num, column=16).value * dest_sheet.cell(row=2, column=16).value  # Perform the calculation
+    calculated_value_project = dest_sheet.cell(row=row_num, column=16).value * dest_sheet.cell(row=2, column=16).value  
 
-    calculated_value_final_exam = dest_sheet.cell(row=row_num, column=17).value * dest_sheet.cell(row=2, column=17).value  # Perform the calculation
+    calculated_value_final_exam = dest_sheet.cell(row=row_num, column=17).value * dest_sheet.cell(row=2, column=17).value 
 
-    dest_sheet.cell(row=row_num, column=18, value=calculated_value_assignment+calculated_value_quiz+calculated_value_midterm+calculated_value_presenation+calculated_value_project+calculated_value_final_exam)  # Place the result in column 18
+    dest_sheet.cell(row=row_num, column=18, value=calculated_value_assignment+calculated_value_quiz+calculated_value_midterm+calculated_value_presenation+calculated_value_project+calculated_value_final_exam)  
 
 # Apply formula from row 4 to last row
 for row in range(4, last_row + 1):
@@ -61,9 +61,9 @@ for row in range(4, last_row + 1):
     cell_to_write = f'T{row}'
     dest_sheet[cell_to_write].value = f'=IF({cell_to_check}="F", "Fail", "Pass")'
 
-# Assign letter grades based on total score (from column 18)
+# turn grades into letters
 for row_num in range(4, last_row + 1):
-    total_score = dest_sheet.cell(row=row_num, column=18).value  # Retrieve the total score from column 18
+    total_score = dest_sheet.cell(row=row_num, column=18).value  # get total
 
     if total_score is not None:
         if total_score >= 90:
@@ -87,15 +87,15 @@ for row_num in range(4, last_row + 1):
         else:
             grade = 'F'
 
-        dest_sheet.cell(row=row_num, column=19, value=grade)  # Store the letter grade in column 19
+        dest_sheet.cell(row=row_num, column=19, value=grade)  # put letter in column 19
 
-# Create a border style
+# border style
 thin_border = Border(left=Side(style='thin'), 
                      right=Side(style='thin'), 
                      top=Side(style='thin'), 
                      bottom=Side(style='thin'))
 
-# Merge cells
+# Merge 
 dest_sheet.merge_cells('C1:G1')
 dest_sheet.merge_cells('H1:L1')
 dest_sheet.merge_cells('M1:N1')
@@ -107,13 +107,13 @@ dest_sheet.merge_cells('B1:B3')
 dest_sheet.merge_cells('R1:R3')
 dest_sheet.merge_cells('S1:S3')
 dest_sheet.merge_cells('T1:T3')
-# Center-align all cells in destination sheet
+# tarteeb center 
 for row in dest_sheet.iter_rows():
     for cell in row:
         cell.alignment = Alignment(horizontal='center', vertical='center')
         cell.border = thin_border
 
-# Set the width of column B to 15
+# 3rd b = 15
 dest_sheet.column_dimensions['B'].width = 15
 dest_sheet.column_dimensions['O'].width = 12
 dest_sheet.column_dimensions['P'].width = 12
@@ -126,19 +126,19 @@ green_fill = PatternFill(start_color="EBF1DE", end_color="EBF1DE", fill_type="so
 blue_fill = PatternFill(start_color="DAEEF3", end_color="DAEEF3", fill_type="solid")
 orange_fill = PatternFill(start_color="FDE9D9", end_color="FDE9D9", fill_type="solid")
 
-# Apply green fill only to the first two rows for all columns
+# colors
 for row in range(1, 4):  # Rows 1 and 3
     for col in range(1, dest_sheet.max_column + 1):  # All columns
         dest_sheet.cell(row=row, column=col).fill = green_fill
 
-# Apply blue fill to the first two columns from the 4th row to the end
-for row in range(4, dest_sheet.max_row + 1):  # Starting from row 4 to the end
-    for col in range(1, 3):  # First two columns
+# colors
+for row in range(4, dest_sheet.max_row + 1):  
+    for col in range(1, 3):  
         dest_sheet.cell(row=row, column=col).fill = blue_fill
 
-# Apply orange fill to the first two columns from the 4th row to the end
-for row in range(4, dest_sheet.max_row + 1):  # Starting from row 4 to the end
-    for col in range(3, 21):  # First two columns
+#colors
+for row in range(4, dest_sheet.max_row + 1):  
+    for col in range(3, 21):  
         dest_sheet.cell(row=row, column=col).fill = orange_fill
 
 #---------------------------- Student's Report Sheet ---------------------------
@@ -176,22 +176,22 @@ dest_sheet1.cell(row=20, column=3, value="Presentation")
 dest_sheet1.cell(row=20, column=4, value="Project")
 dest_sheet1.cell(row=20, column=5, value="final Exam")
 
-# Paste the value into cell in column 3, row 5 of the destination sheet
+
 dest_sheet1.cell(row=5, column=2).value = Info_Sheet.cell(row=2, column=2).value
 dest_sheet1.cell(row=5, column=5).value = Info_Sheet.cell(row=3, column=2).value
 dest_sheet1.cell(row=7, column=2).value = Info_Sheet.cell(row=4, column=2).value
 dest_sheet1.cell(row=7, column=5).value = Info_Sheet.cell(row=5, column=2).value
 
-# Create a list to store names from B4 to B34
+# list for names
 name_list = [Full_Sheet.cell(row=i, column=2).value for i in range(4, 35)]
 
-# Create a comma-separated string from the list
+
 name_str = ', '.join(name_list)
 
-# Create DataValidation object
+
 dv = DataValidation(type="list", formula1=f'"{name_str}"', allow_blank=True)
 
-# Apply data validation to cell B3 in Info_Sheet
+
 dest_sheet1.add_data_validation(dv)
 dv.add(dest_sheet1['B3'])
 
@@ -213,7 +213,7 @@ dest_sheet1["C21"].value = f'=INDEX(\'Letter Grades\'!O4:O34, MATCH(B3, \'Letter
 dest_sheet1["D21"].value = f'=INDEX(\'Letter Grades\'!P4:P34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
 dest_sheet1["E21"].value = f'=INDEX(\'Letter Grades\'!Q4:Q34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
 dest_sheet1["D12"].value = f'=INDEX(\'Letter Grades\'!T4:T34, MATCH(B3, \'Letter Grades\'!B4:B34, 0))'
-# Create a bar chart
+# Create bar chart
 chart1 = BarChart()
 
 # Define data and categories
@@ -227,7 +227,7 @@ chart1.set_categories(categories)
 
 chart1.legend = None
 
-# Position the chart on the worksheet
+# Position the chart 
 dest_sheet1.add_chart(chart1, "A23")
 
 # Create a bar chart
@@ -244,7 +244,7 @@ chart2.set_categories(categories)
 
 chart2.legend = None
 
-# Position the chart on the worksheet
+# Position the chart 
 dest_sheet1.add_chart(chart2, "A40")
 
 
@@ -259,14 +259,14 @@ dest_sheet1.merge_cells('A13:E13')
 dest_sheet1.merge_cells('A14:E14')
 dest_sheet1.merge_cells('A17:E17')
 
-# Set the width of column A to E = 15
+
 dest_sheet1.column_dimensions['A'].width = 14.5
 dest_sheet1.column_dimensions['B'].width = 14.5
 dest_sheet1.column_dimensions['C'].width = 14.5
 dest_sheet1.column_dimensions['D'].width = 14.5
 dest_sheet1.column_dimensions['E'].width = 14.5
 
-# Center-align all cells in destination sheet
+#trteeb center
 for row in dest_sheet1.iter_rows():
     for cell in row:
         cell.alignment = Alignment(horizontal='center', vertical='center')
